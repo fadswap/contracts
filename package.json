@@ -1,0 +1,44 @@
+{
+  "name": "fadswap",
+  "author": "fadswap",
+  "license": "MIT",
+  "version": "0.0.1",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fadswap/contracts.git"
+  },
+  "devDependencies": {
+    "@ethersproject/hardware-wallets": "5.0.14",
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "chai": "^4.3.6",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.4",
+    "hardhat": "^2.9.3",
+    "hardhat-deploy": "^0.11.4",
+    "hardhat-deploy-ethers": "^0.3.0-beta.13",
+    "hardhat-exposed": "^0.2.3",
+    "rimraf": "3.0.2",
+    "solhint": "3.3.6",
+    "solidity-coverage": "^0.7.20"
+  },
+  "scripts": {
+    "test": "hardhat test --show-stack-traces",
+    "clean": "rimraf artifacts cache coverage deployments",
+    "coverage": "hardhat coverage",
+    "compile": "hardhat compile --force",
+    "doc-gen": "yarn run solidity-utils-docify",
+    "copy-contract": "hardhat run scripts/copy_contract.js",
+    "deploy-local": "hardhat --network localhost deploy --export dist/contracts.json && yarn copy-contract",
+    "lint:sol": "solhint --max-warnings 0 \"contracts/**/*.sol\"",
+    "lint:sol:fix": "solhint --max-warnings 0 \"contracts/**/*.sol\" --fix",
+    "lint": "yarn run lint:sol",
+    "lint:fix": "yarn run lint:sol:fix"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.5.0",
+    "dotenv": "^16.0.0",
+    "typescript": "^4.6.3"
+  }
+}
