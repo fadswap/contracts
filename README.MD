@@ -10,12 +10,28 @@ The specials feature of this DEX is listed below (not limited to the list):
 - And more  
 
 ### Roadmap
-- [x] Project Idea's
+
+Q1 2022:
+- [x] Project Idea's & Prototype design
 - [x] Team Building
-- [ ] Projects Documents (pitch desk, Whitepaper)
-- [ ] Website development
-- [ ] Development of smart contract
-- [ ] Smart contract audits
-- [ ] Dapp Front-end development
-- [ ] FAD Token Launchpad
-- [ ] Official Launch 
+- [x] Website Creation
+- [x] Pitch deck Completed 
+
+Q2 2022:
+- [ ] White paper
+- [ ] Website Launch
+- [ ] $FAD Token Creation
+- [ ] Strategic Plan
+- [ ] Swap & Staking Dapp Development
+- [ ] Launchpad
+
+Q3 2022:
+- [ ] Swap & Staking Dapp's Launch
+- [ ] Project Launched to Public
+- [ ] Partnerships
+- [ ] Token listing on Exchanges
+
+Q4 2022:
+- [ ] Proposal Governance Dapp's Development
+- [ ] Strategic Partnerships
+- [ ] Coming Soon
