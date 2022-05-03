@@ -7,7 +7,19 @@ The specials feature of this DEX is listed below (not limited to the list):
 - Community can vote treasury and referral share
 - Support of referral system
 - Community can receive the GAS fees refund based on the amount of the token they stacked (share). 
-- And more  
+- And more 
+
+Most exchanges maintain an order book and facilitate matches between buyers and sellers.  
+FADSwap smart contracts hold liquidity reserves of various tokens, and trades are executed directly against these reserves.   
+Prices are set automatically using the constant product x * y = k market maker mechanism, which keeps overall reserves in relative 
+equilibrium.  
+Reserves are pooled between a network of liquidity providers who supply the system with tokens in exchange for a 
+proportional share of transaction fees.
+
+An important feature of FADSwap is the utilization of a factory contract that deploys a separate exchange contract 
+for each BSC token contract. 
+These exchange contracts each hold independent reserves of token pair. 
+This allows trades between the token pair based on the relative supplies. 
 
 ### Roadmap
 
