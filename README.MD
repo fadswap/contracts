@@ -32,7 +32,7 @@ This allows trades between the token pair based on the relative supplies.
 **Q2 2022:**
 - [ ] White paper
 - [ ] Website Launch
-- [ ] $FAD Token Creation
+- [x] $FAD Token Creation
 - [ ] Strategic Plan
 - [ ] Swap & Staking Dapp Development
 - [ ] Launchpad
