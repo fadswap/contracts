@@ -52,9 +52,9 @@ contract SwapFactory is ISwapFactory, GovernanceFactory {
   )
     public returns(Swap pool)
   {
-    require(tokenA != tokenB, "SwapFactory: Duplicate Tokens");
+    require(tokenA != tokenB, "SWAP_FACT_DUPLICATE_TOKENS");
     (IERC20 token1, IERC20 token2) = sortTokens(tokenA, tokenB);
-    require(_pools[token1][token2] == Swap(address(0)), "SwapFactory: Pool Already Exists");
+    require(_pools[token1][token2] == Swap(address(0)), "SWAP_FACT_POOL_ALREADY_EXISTS");
 
     string memory symbole1 = token1.getSymbol();
     string memory symbole2 = token2.getSymbol();
@@ -62,7 +62,7 @@ contract SwapFactory is ISwapFactory, GovernanceFactory {
     pool = poolCreator.deploy(
       token1, 
       token2, 
-      string(abi.encodePacked("Liquidity Pool (", symbole1, "-", symbole2, ")")), 
+      string(abi.encodePacked("FADSWAP Liquidity Pool (", symbole1, "-", symbole2, ")")), 
       string(abi.encodePacked(symbole1, "-", symbole2, "-LP")), 
       poolOwner
     );

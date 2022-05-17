@@ -54,7 +54,7 @@ abstract contract AbstractReward is Ownable, BalanceHelper {
   }
 
   modifier onlyRewardDistributor(uint position) {
-    require(msg.sender == tokenRewards[position].rewardDistributor, "Access Denied: Only Distributor");
+    require(msg.sender == tokenRewards[position].rewardDistributor, "AREWARD_ONLY_DISTRIBUTOR");
     _;
   }
 
@@ -129,22 +129,22 @@ abstract contract AbstractReward is Ownable, BalanceHelper {
   {
     TokenReward storage tokenReward = tokenRewards[position];
     uint256 scale = tokenReward.scale;
-    require(reward < type(uint).max.div(scale), "Reward Overlow");
+    require(reward < type(uint).max.div(scale), "AREWARD_REWARD_OVERLOW");
     uint256 duration = tokenReward.duration;
     uint256 rewardRate;
 
     if(block.timestamp >= tokenReward.endDate){
-      require(reward >= duration, "Reward is too small");
+      require(reward >= duration, "AREWARD_REWARD_TOO_SMALL");
       rewardRate = reward.mul(scale).div(duration);
     } else {
       uint256 remaining = tokenReward.endDate.sub(block.timestamp);
       uint256 leftOver = remaining.mul(tokenReward.rate).div(scale);
-      require(reward.add(leftOver) >= duration, "Reward is too small");
+      require(reward.add(leftOver) >= duration, "AREWARD_REWARD_TOO_SMALL");
       rewardRate = reward.add(leftOver).mul(scale).div(duration);
     }
 
     uint256 balance = tokenReward.gift.balanceOf(address(this));
-    require(rewardRate <= balance.mul(scale).div(duration), "Reward is too big");
+    require(rewardRate <= balance.mul(scale).div(duration), "AREWARD_REWARD_TOO_BIG");
     tokenReward.rate = rewardRate;
     tokenReward.lastUpdateTime = block.timestamp;
     tokenReward.endDate = block.timestamp.add(duration);
@@ -169,7 +169,7 @@ abstract contract AbstractReward is Ownable, BalanceHelper {
     onlyRewardDistributor(position)
   {
     TokenReward storage tokenReward = tokenRewards[position];
-    require(block.timestamp >= tokenReward.endDate, "Reward Not Finished Yet");
+    require(block.timestamp >= tokenReward.endDate, "AREWARD_REWARD_ONGOING");
     tokenReward.duration = duration;
 
     emit RewardDurationUpdated(position, duration);
@@ -180,11 +180,11 @@ abstract contract AbstractReward is Ownable, BalanceHelper {
     external
     onlyOwner
   {
-    require(scale > 0, "Reward Scale Too Low");
-    require(scale <= 1e36, "Reward Scale Too High");
+    require(scale > 0, "AREWARD_REWARD_SCALE_TOO_LOW");
+    require(scale <= 1e36, "AREWARD_REWARD_SCALE_TOO_HIGH");
     TokenReward storage tokenReward = tokenRewards[position];
 
-    require(tokenReward.endDate == 0, "Can't Change Scale After Start");
+    require(tokenReward.endDate == 0, "AREWARD_CANT_CHANGE_AFTER_START");
     tokenReward.scale = scale;
 
     emit RewardScaleUpdated(position, scale);
@@ -196,11 +196,11 @@ abstract contract AbstractReward is Ownable, BalanceHelper {
     public
     onlyOwner
   {
-    require(scale > 0, "Reward Scale Too Low");
-    require(scale <= 1e36, "Reward Scale Too High");
+    require(scale > 0, "AREWARD_REWARD_SCALE_TOO_LOW");
+    require(scale <= 1e36, "AREWARD_REWARD_SCALE_TOO_HIGH");
     uint256 length = tokenRewards.length;
     for(uint i = 0; i < length; i++){
-      require(gift != tokenRewards[i].gift, "Reward Gift Already Added");
+      require(gift != tokenRewards[i].gift, "AREWARD_GIFT_ALREADY_ADDED");
     }
 
     TokenReward storage tokenReward = tokenRewards.push();

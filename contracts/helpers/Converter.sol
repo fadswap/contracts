@@ -25,7 +25,7 @@ abstract contract Converter is Ownable {
   uint256 private constant _MAX_LIQUIDITY_SHARE = 100;
   IERC20 public immutable fadToken;
   ISwapFactory public immutable swapFactory;
-  mapping(IERC20 => bool) public pathWhitlist;
+  mapping(IERC20 => bool) public pathWhitelist;
 
   constructor(IERC20 _fadToken, ISwapFactory _swapFactory) {
     fadToken = _fadToken;
@@ -33,26 +33,26 @@ abstract contract Converter is Ownable {
   }
 
   receive() external payable {
-    require(msg.sender != tx.origin, "Transfer forbidden");
+    require(msg.sender != tx.origin, "CONVERTOR_TRANSFER_FORBIDDEN");
   }
 
   modifier validSpread(Swap swap){
-    require(_validateSpread(swap), "Spread Is Too High");
+    require(_validateSpread(swap), "CONVERTOR_SPREAD_TOO_HIGH");
     _;
   }
 
   modifier validPool(Swap swap){
-    require(swapFactory.isPool(swap), "Invalid pool");
+    require(swapFactory.isPool(swap), "CONVERTOR_INVALID_POOL");
     _;
   }
 
   modifier validPath(IERC20[] memory path){
-    require(path.length > 0, "Min Path Length Is 1");
-    require(path.length < 5, "Max Path Length Is 4");
-    require(path[path.length - 1] == fadToken, "Should Swap To Target Token");
+    require(path.length > 0, "CONVERTOR_MIN_PATH_LENGTH_IS_1");
+    require(path.length < 5, "CONVERTOR_MIN_PATH_LENGTH_IS_4");
+    require(path[path.length - 1] == fadToken, "CONVERTOR_SWAP_TO_TARGET_TOKEN");
 
     for(uint256 i = 0; i < path.length; i += 1){
-      require(pathWhitlist[path[i]], "Token Is Not Whitelist");
+      require(pathWhitelist[path[i]], "CONVERTOR_TOKEN_NOT_WHITELIST");
     }
     _;
   }
@@ -61,7 +61,7 @@ abstract contract Converter is Ownable {
     external
     onlyOwner
   {
-    pathWhitlist[token] = status;
+    pathWhitelist[token] = status;
   }
 
   function _validateSpread(Swap swap)
@@ -122,7 +122,7 @@ abstract contract Converter is Ownable {
     uint256 pathLength = path.length;
     for(uint256 i = 0 ; i < pathLength; i += 1) {
       Swap swap = swapFactory.pools(path[i], path[i+1]);
-      require(_validateSpread(swap), "Spread Is Too High");
+      require(_validateSpread(swap), "CONVERTOR_SPREAD_TOO_HIGH");
       uint256 value = amount;
       if(!path[i].isBNB()){
         path[i].safeApprove(address(swap), amount);

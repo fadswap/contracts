@@ -70,7 +70,7 @@ contract ReferralFeeReceiver is IFeeCollector, Converter, ReentrancyGuard {
   {
     TokenInfo storage token = tokenInfo[swap];
     uint256 currentEpoch = token.currentEpoch;
-    require(token.firstUnprocessedEpoch == currentEpoch, "Previous Epoch Is Not Finalized");
+    require(token.firstUnprocessedEpoch == currentEpoch, "FEE_COLLECT_PREV_EPOCH_NOT_END");
     IERC20[] memory tokens = swap.getTokens();
     uint256 token0Balance = tokens[0].getBalanceOf(address(this));
     uint256 token1Balance = tokens[1].getBalanceOf(address(this));
@@ -88,7 +88,7 @@ contract ReferralFeeReceiver is IFeeCollector, Converter, ReentrancyGuard {
     TokenInfo storage token = tokenInfo[swap];
     uint256 firstUnprocessedEpoch = token.firstUnprocessedEpoch;
     EpochBalance storage epochBalance = token.epochBalance[firstUnprocessedEpoch];
-    require(firstUnprocessedEpoch.add(1) == token.currentEpoch, "Previous Epoch Already Finalized");
+    require(firstUnprocessedEpoch.add(1) == token.currentEpoch, "FEE_COLLECT_PREV_EPOCH_ENDED");
     IERC20[] memory tokens = swap.getTokens();
     uint256 availableBalance;
     if(path[0] == tokens[0]) {
@@ -103,10 +103,10 @@ contract ReferralFeeReceiver is IFeeCollector, Converter, ReentrancyGuard {
     if(returnAmount == 0) {
       // get rid of dust
       if(availableBalance > 0) {
-        require(availableBalance == amount, "Available Balance Is Not Dust");
+        require(availableBalance == amount, "FEE_COLLECT_AVAIL_BAL_NOT_DUST");
         for(uint256 i = 0; i + 1 < path.length; i += 1) {
           Swap _swap = swapFactory.pools(path[i], path[i + 1]);
-          require(_validateSpread(_swap), "Spread Is Too Hight");
+          require(_validateSpread(_swap), "FEE_COLLECT_SPREAD_TOO_HIGH");
         }
 
         if(path[0].isBNB()){
@@ -167,8 +167,8 @@ contract ReferralFeeReceiver is IFeeCollector, Converter, ReentrancyGuard {
     TokenInfo storage token = tokenInfo[swap];
     uint256 currentEpock = token.currentEpoch;
     uint256 firstUnprocessedEpoch = token.firstUnprocessedEpoch;
-    require(firstUnprocessedEpoch.add(1) == token.currentEpoch, "Epoch Already Finalized");
-    require(user.firstUnprocessedEpoch[swap] == firstUnprocessedEpoch, "Epoch Funds Alreaded Claimed");
+    require(firstUnprocessedEpoch.add(1) == token.currentEpoch, "FEE_COLLECT_EPOCH_ENDED");
+    require(user.firstUnprocessedEpoch[swap] == firstUnprocessedEpoch, "FEE_COLLECT_EPOCH_FUND_CLAIMED");
     user.firstUnprocessedEpoch[swap] = currentEpock;
     uint256 share = user.share[swap][firstUnprocessedEpoch];
     if(share > 0) {

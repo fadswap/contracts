@@ -129,7 +129,7 @@ abstract contract Governance is ERC20, Ownable, ReentrancyGuard {
   /** Records `msg.senders`'s vote for fee */
   function voteFee(uint256 vote) external
   {
-    require(vote <= SwapConstants._MAX_FEE, "Fee Vote Is Too High");
+    require(vote <= SwapConstants._MAX_FEE, "GOV_FEE_VOTE_HIGH");
     _fee.updateVote(
       msg.sender, 
       _fee.votes[msg.sender], 
@@ -144,7 +144,7 @@ abstract contract Governance is ERC20, Ownable, ReentrancyGuard {
   /** Records `msg.senders`'s vote for slippage fee */
   function voteSlippageFee(uint256 vote) external
   {
-    require(vote <= SwapConstants._MAX_SLIPPAGE_FEE, "Slippage Fee Vote Is Too High");
+    require(vote <= SwapConstants._MAX_SLIPPAGE_FEE, "GOV_SLIPPAGE_FEE_VOTE_HIGH");
     _slippageFee.updateVote(
       msg.sender, 
       _slippageFee.votes[msg.sender], 
@@ -159,8 +159,8 @@ abstract contract Governance is ERC20, Ownable, ReentrancyGuard {
   /** Records `msg.senders`'s vote for decay period */
   function voteDecayPeriod(uint256 vote) external
   {
-    require(vote <= SwapConstants._MAX_DECAY_PERIOD, "Decay Period Vote Is Too High");
-    require(vote >= SwapConstants._MIN_DECAY_PERIOD, "Decay Period Vote Is Too Low");
+    require(vote <= SwapConstants._MAX_DECAY_PERIOD, "GOV_DECAY_PERIOD_VOTE_HIGH");
+    require(vote >= SwapConstants._MIN_DECAY_PERIOD, "GOV_DECAY_PERIOD_VOTE_LOW");
     _decayPeriod.updateVote(
       msg.sender, 
       _decayPeriod.votes[msg.sender], 

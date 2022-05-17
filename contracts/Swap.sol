@@ -79,7 +79,7 @@ contract Swap is Governance {
   mapping(IERC20 => VirtualBalance.Data) public virtualBalanceToRemove;
 
   modifier whenNotShutdown {
-    require(governanceFactory.isActive(), "Swap: Factory Is Shutdown");
+    require(governanceFactory.isActive(), "SWAP_FACTORY_SHUTDOWN");
     _;
   }
 
@@ -93,9 +93,9 @@ contract Swap is Governance {
     ERC20(name, symbol)
     Governance(_governanceFactory)
   {
-    require(bytes(name).length > 0, "Swap: Name Is Empty");
-    require(bytes(symbol).length > 0, "Swap: Symbol Is Empty");
-    require(_token0 != _token1, "Swap: Two Tokens Is Same");
+    require(bytes(name).length > 0, "SWAP_NAME_EMPTY");
+    require(bytes(symbol).length > 0, "SWAP_SYMBOL_EMPTY");
+    require(_token0 != _token1, "SWAP_TWO_TOKENS_SAME");
     token0 = _token0;
     token1 = _token1;
   }
@@ -167,7 +167,7 @@ contract Swap is Governance {
     returns(uint256 fairSupply, uint256[2] memory receivedAmounts)
   {
     IERC20[2] memory _tokens = [token0, token1];
-    require(msg.value == (_tokens[0].isBNB() ? maxAmounts[0] : (_tokens[1].isBNB() ? maxAmounts[1] : 0)), "Swap: Wrong Value Usage");
+    require(msg.value == (_tokens[0].isBNB() ? maxAmounts[0] : (_tokens[1].isBNB() ? maxAmounts[1] : 0)), "SWAP_WRONG_MSG_VALUE");
     uint256 totalSupply = totalSupply();
     if(totalSupply == 0) {
       fairSupply = _BASE_SUPPLY.mul(99);
@@ -175,8 +175,8 @@ contract Swap is Governance {
 
       for(uint i = 0; i < maxAmounts.length; i++) {
         fairSupply = Math.max(fairSupply, maxAmounts[i]);
-        require(maxAmounts[i] > 0, "Swap: Amount Is Zero");
-        require(maxAmounts[i] >= minAmounts[i], "Swap: Min Amount Not Reached");
+        require(maxAmounts[i] > 0, "SWAP_AMOUNT_IS_ZERO");
+        require(maxAmounts[i] >= minAmounts[i], "SWAP_MIN_AMOUNT_NOT_REACHED");
         _tokens[i].fadTransferFrom(payable(msg.sender), address(this), maxAmounts[i]);
         receivedAmounts[i] = maxAmounts[i];
       }
@@ -193,9 +193,9 @@ contract Swap is Governance {
 
       uint256 fairSupplyCached = fairSupply; 
       for(uint i = 0; i < maxAmounts.length; i++) {
-        require(maxAmounts[i] > 0, "Swap: Amount Is Zero");
+        require(maxAmounts[i] > 0, "SWAP_AMOUNT_IS_ZERO");
         uint256 amount = realBalances[i].mul(fairSupplyCached).add(totalSupply - 1).div(totalSupply);
-        require(amount >= minAmounts[i], "Swap: Min Amount Not Reached");
+        require(amount >= minAmounts[i], "SWAP_MIN_AMOUNT_NOT_REACHED");
         _tokens[i].fadTransferFrom(payable(msg.sender), address(this), amount);
         receivedAmounts[i] = _tokens[i].getBalanceOf(address(this)).sub(realBalances[i]);
         fairSupply = Math.min(fairSupply, totalSupply.mul(receivedAmounts[i]).div(realBalances[i]));
@@ -208,7 +208,7 @@ contract Swap is Governance {
       }
     }
       
-    require(fairSupply > 0, "Swap: Result Is Not Enough");
+    require(fairSupply > 0, "SWAP_RESULT_NOT_ENOUGH");
     _mint(target, fairSupply);
 
     emit Deposited(msg.sender, target, fairSupply, receivedAmounts[0], receivedAmounts[1]);
@@ -238,7 +238,7 @@ contract Swap is Governance {
       uint256 value = preBalance.mul(amount).div(totalSupply);
       token.fadTransfer(target, value);
       withdrawnAmounts[i] = value;
-      require(i >= minReturns.length || value >= minReturns[i], "Swap: Result Is Not Enough");
+      require(i >= minReturns.length || value >= minReturns[i], "SWAP_RESULT_NOT_ENOUGH");
       virtualBalanceToRemove[token].scale(_decayPeriod, preBalance, totalSupply.add(amount), totalSupply);
       virtualBalanceToAdd[token].scale(_decayPeriod, preBalance, totalSupply.add(amount), totalSupply);
     }
@@ -261,7 +261,7 @@ contract Swap is Governance {
     whenNotShutdown
     returns(uint256 result)
   {
-    require(msg.value == (src.isBNB() ? amount : 0), "Swap: Wrong Value");
+    require(msg.value == (src.isBNB() ? amount : 0), "SWAP_WRONG_MSG_VALUE");
     Balances memory balances = Balances({
       src: src.getBalanceOf(address(this)).sub(src.isBNB() ? msg.value : 0),
       dst: dst.getBalanceOf(address(this))
@@ -304,7 +304,7 @@ contract Swap is Governance {
     src.fadTransferFrom(payable(msg.sender), address(this), amount);
     confirmed = src.getBalanceOf(address(this)).sub(balances.src);
     result = _getQuote(src, dst, confirmed, virtualBalances.src, virtualBalances.dst, fees.fee, fees.slippageFee);
-    require(result > 0 && result >= minReturn, "Swap: Return Is Not Enough");
+    require(result > 0 && result >= minReturn, "SWAP_RESULT_NOT_ENOUGH");
     dst.fadTransfer(receiver, result);
 
     // Update virtual balances to the same direction only at imbalanced state
@@ -429,8 +429,8 @@ contract Swap is Governance {
     uint256 balance1 = token1.getBalanceOf(address(this));
 
     token.fadTransfer(payable(msg.sender), amount);
-    require(token0.getBalanceOf(address(this)) >= balance0, "Swap: Rescue Funds Access Denied");
-    require(token1.getBalanceOf(address(this)) >= balance1, "Swap: Rescue Funds Access Denied");
-    require(balanceOf(address(this)) >= _BASE_SUPPLY, "Swap: Rescue Funds Access Denied");
+    require(token0.getBalanceOf(address(this)) >= balance0, "SWAP_RESCUE_DENIED_BAL_0");
+    require(token1.getBalanceOf(address(this)) >= balance1, "SWAP_RESCUE_DENIED_BAL_1");
+    require(balanceOf(address(this)) >= _BASE_SUPPLY, "SWAP_RESCUE_DENIED_BASE_SUPPLY");
   }
 }

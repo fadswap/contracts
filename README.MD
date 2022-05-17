@@ -14,7 +14,7 @@ new features that were not used in the existing network.
 
 Most exchanges maintain an order book and facilitate matches between buyers and sellers. 
 FADSwap smart contracts hold liquidity reserves of various tokens, and trades are executed directly against these reserves. 
-Prices are set automatically using the constant product x '\*' y = k market maker mechanism, which keeps overall reserves in relative 
+Prices are set automatically using the constant product x \* y = k market maker mechanism, which keeps overall reserves in relative 
 equilibrium. Reserves are pooled between a network of liquidity providers who supply the system with tokens in exchange for a 
 proportional share of transaction fees.  
 

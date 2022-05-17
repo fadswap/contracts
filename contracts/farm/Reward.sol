@@ -57,7 +57,7 @@ contract Reward is AbstractReward {
     /** Stakes `amount` of tokens into farm */
     function stake(uint256 amount) public updateAccountReward(msg.sender)
     {
-      require(amount > 0, "Can't Stake 0");
+      require(amount > 0, "REWARD_CANT_STAKE_ZERO");
       swap.transferFrom(msg.sender, address(this), amount);
       _mint(msg.sender, amount);
 
@@ -68,7 +68,7 @@ contract Reward is AbstractReward {
     /** Withdraws `amount` of tokens from farm */
     function withdraw(uint256 amount) public updateAccountReward(msg.sender)
     {
-      require(amount > 0, "Can't Withdraw 0");
+      require(amount > 0, "REWARD_CANT_WITHDRAW_ZERO");
       _burn(msg.sender, amount);
       swap.transfer(msg.sender, amount);
 
@@ -115,7 +115,7 @@ contract Reward is AbstractReward {
 
     function voteFee(uint256 vote) external
     {
-      require(vote <= SwapConstants._MAX_FEE, "Fee Vote Is Too High");
+      require(vote <= SwapConstants._MAX_FEE, "REWARD_FEE_VOTE_HIGH");
       _fee.updateVote(
         msg.sender, 
         _fee.votes[msg.sender], 
@@ -131,7 +131,7 @@ contract Reward is AbstractReward {
 
     function voteSlippageFee(uint256 vote) external
     {
-      require(vote <= SwapConstants._MAX_SLIPPAGE_FEE, "Slippage Fee Vote Is Too High");
+      require(vote <= SwapConstants._MAX_SLIPPAGE_FEE, "REWARD_SLIPPAGE_FEE_VOTE_HIGH");
       _slippageFee.updateVote(
         msg.sender, 
         _slippageFee.votes[msg.sender], 
@@ -147,8 +147,8 @@ contract Reward is AbstractReward {
 
     function voteDecayPeriod(uint256 vote) external
     {
-      require(vote <= SwapConstants._MAX_DECAY_PERIOD, "Decay Period Vote Is Too High");
-      require(vote >= SwapConstants._MIN_DECAY_PERIOD, "Decay Period Vote Is Too Low");
+      require(vote <= SwapConstants._MAX_DECAY_PERIOD, "REWARD_DECAY_PERIOD_VOTE_HIGH");
+      require(vote >= SwapConstants._MIN_DECAY_PERIOD, "REWARD_DECAY_PERIOD_VOTE_LOW");
       _decayPeriod.updateVote(
         msg.sender, 
         _decayPeriod.votes[msg.sender], 
@@ -285,13 +285,13 @@ contract Reward is AbstractReward {
     onlyOwner
   {
     for(uint256 i = 0; i < tokenRewards.length; i++) {
-      require(token != tokenRewards[i].gift, "Can't Rescue Gift");
+      require(token != tokenRewards[i].gift, "REWARD_CANT_RESCUE_GIFT");
     }
 
     token.fadTransfer(payable(msg.sender), amount);
 
     if(token == swap) {
-      require(token.getBalanceOf(address(this)) == totalSupply(), "Can't Withdraw Staked Tokens");
+      require(token.getBalanceOf(address(this)) == totalSupply(), "REWARD_CANT_WITHDRAW_FUNDS");
     }
   }
 }

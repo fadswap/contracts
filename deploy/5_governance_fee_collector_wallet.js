@@ -29,4 +29,5 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
   const swapFactoryOwnershipTxn = await swapFactory.transferOwnership(deployer);
   await swapFactoryOwnershipTxn.wait();
+ 
 };

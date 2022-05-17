@@ -6,9 +6,11 @@ require("@nomiclabs/hardhat-waffle");
 //require('hardhat-exposed');
 require('solidity-coverage');
 require('hardhat-deploy');
+require('hardhat-gas-reporter');
+require("@nomiclabs/hardhat-etherscan");
+require('@nomiclabs/hardhat-ethers');
 
-const { MNEMONIC } = process.env
-
+const { MNEMONIC, BSCSCAN_API_KEY  } = process.env
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
@@ -35,6 +37,13 @@ module.exports = {
       saveDeployments: true,
       tags: ["local"]
     },
+    ganache: {
+      url: "http://127.0.0.1:8545",
+      live: false,
+      saveDeployments: true,
+      chainId: 31337,
+      tags: ["local"]
+    },
     hardhat: {
     },
     bsc_testnet: {
@@ -50,9 +59,18 @@ module.exports = {
       accounts: {mnemonic: MNEMONIC}
     }
   },
+  etherscan: {
+    // Your API key for Etherscan
+    // Obtain one at https://bscscan.com/
+    apiKey: BSCSCAN_API_KEY
+  },
   namedAccounts: {
     deployer: {
         default: 0,
     },
   },
+  gasReporter: {
+    enable: true,
+    currency: 'USD',
+  }
 };

@@ -31,14 +31,17 @@
     "doc-gen": "yarn run solidity-utils-docify",
     "copy-contract": "hardhat run scripts/copy_contract.js",
     "deploy-local": "hardhat --network localhost deploy --export dist/contracts.json && yarn copy-contract",
+    "deploy-ganache": "hardhat --network ganache deploy --export dist/contracts.json && yarn copy-contract",
     "lint:sol": "solhint --max-warnings 0 \"contracts/**/*.sol\"",
     "lint:sol:fix": "solhint --max-warnings 0 \"contracts/**/*.sol\" --fix",
     "lint": "yarn run lint:sol",
     "lint:fix": "yarn run lint:sol:fix"
   },
   "dependencies": {
+    "@nomiclabs/hardhat-etherscan": "^3.0.3",
     "@openzeppelin/contracts": "^4.5.0",
     "dotenv": "^16.0.0",
+    "hardhat-gas-reporter": "^1.0.8",
     "typescript": "^4.6.3"
   }
 }

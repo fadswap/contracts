@@ -44,9 +44,9 @@ library FADERC20 {
   {
     if(amount > 0){
       if(isBNB(token)){
-        require(msg.value >= amount, "Value Is not Enough");
-        require(from == msg.sender, "From Is Not The Sender");
-        require(to == address(this), "To Is Not this");
+        require(msg.value >= amount, "FADERC20_VALUE_NOT_ENOUGH");
+        require(from == msg.sender, "FADERC20_FROM_NOT_SENDER");
+        require(to == address(this), "FADERC20_TO_NOT_THIS");
         if(msg.value > amount) {
           //Return the remaining to user
           from.transfer(msg.value.sub(amount));

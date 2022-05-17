@@ -222,7 +222,7 @@ contract GovernanceFactory is IGovernanceFactory, BaseGovernance, BalanceHelper,
   /** Records `msg.senders`'s vote for fee */
   function defaultVoteFee(uint256 vote) external
   {
-    require(vote <= SwapConstants._MAX_FEE, "Fee Vote Is Too High");
+    require(vote <= SwapConstants._MAX_FEE, "GOV_FACT_FEE_VOTE_HIGH");
     _defaultFee.updateVote(
       msg.sender, 
       _defaultFee.votes[msg.sender], 
@@ -249,7 +249,7 @@ contract GovernanceFactory is IGovernanceFactory, BaseGovernance, BalanceHelper,
   /** Records `msg.senders`'s vote for slippage fee */
   function defaultVoteSlippageFee(uint256 vote) external
   {
-    require(vote <= SwapConstants._MAX_SLIPPAGE_FEE, "Slippage Fee Vote Is Too High");
+    require(vote <= SwapConstants._MAX_SLIPPAGE_FEE, "GOV_FACT_SLIPPAGE_FEE_VOTE_HIGH");
     _defaultSlippageFee.updateVote(
       msg.sender, 
       _defaultSlippageFee.votes[msg.sender], 
@@ -276,8 +276,8 @@ contract GovernanceFactory is IGovernanceFactory, BaseGovernance, BalanceHelper,
   /** Records `msg.senders`'s vote for decay period */
   function defaultVoteDecayPeriod(uint256 vote) external
   {
-    require(vote <= SwapConstants._MAX_DECAY_PERIOD, "Decay Period Vote Is Too High");
-    require(vote >= SwapConstants._MIN_DECAY_PERIOD, "Decay Period Vote Is Too Low");
+    require(vote <= SwapConstants._MAX_DECAY_PERIOD, "GOV_FACT_DECAY_PERIOD_VOTE_HIGH");
+    require(vote >= SwapConstants._MIN_DECAY_PERIOD, "GOV_FACT_DECAY_PERIOD_VOTE_LOW");
     _defaultDecayPeriod.updateVote(
       msg.sender, 
       _defaultDecayPeriod.votes[msg.sender], 
@@ -304,8 +304,8 @@ contract GovernanceFactory is IGovernanceFactory, BaseGovernance, BalanceHelper,
   /** Records `msg.senders`'s vote for referral share */
   function voteReferralShare(uint256 vote) external
   {
-    require(vote <= SwapConstants._MAX_SHARE, "Referral Share Vote Is Too High");
-    require(vote >= SwapConstants._MIN_REFERRAL_SHARE, "Referral Share Vote Is Too Low");
+    require(vote <= SwapConstants._MAX_SHARE, "GOV_FACT_REFER_SHARE_VOTE_HIGH");
+    require(vote >= SwapConstants._MIN_REFERRAL_SHARE, "GOV_FACT_REFER_SHARE_VOTE_LOW");
     _referralShare.updateVote(
       msg.sender, 
       _referralShare.votes[msg.sender], 
@@ -332,7 +332,7 @@ contract GovernanceFactory is IGovernanceFactory, BaseGovernance, BalanceHelper,
   /** Records `msg.senders`'s vote for governance share */
   function voteGovernanceShare(uint256 vote) external
   {
-    require(vote <= SwapConstants._MAX_SHARE, "Governance Share Vote Too High");
+    require(vote <= SwapConstants._MAX_SHARE, "GOV_FACT_GOV_SHARE_VOTE_HIGH");
     _governanceShare.updateVote(
       msg.sender, 
       _governanceShare.votes[msg.sender], 

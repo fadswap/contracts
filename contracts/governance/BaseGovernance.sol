@@ -11,7 +11,7 @@ abstract contract BaseGovernance is IGovernance {
   address public immutable mothership;
 
   modifier onlyMothership {
-    require(msg.sender == mothership, "Access Restricted To Mothership");
+    require(msg.sender == mothership, "BASE_GOV_ONLY_MOTHERSHIP");
     _;
   }
 
@@ -30,7 +30,7 @@ abstract contract BaseGovernance is IGovernance {
     override 
     onlyMothership
   {
-    require(accounts.length == newBalances.length, "Array Length Invalid");
+    require(accounts.length == newBalances.length, "BASE_GOV_ARRAY_LENGTH_INVALID");
     for(uint256 i = 0; i < accounts.length; i++) {
       _updateStakeChanged(accounts[i], newBalances[i]);
     }
