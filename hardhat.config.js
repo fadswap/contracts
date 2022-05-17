@@ -41,7 +41,6 @@ module.exports = {
       url: "http://127.0.0.1:8545",
       live: false,
       saveDeployments: true,
-      chainId: 31337,
       tags: ["local"]
     },
     hardhat: {
